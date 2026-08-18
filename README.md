@@ -1,65 +1,140 @@
-# Mood Archive ── Personal Aesthetic & Vibe Vault ✨
+# Mood Archive — Personal Aesthetic & Vibe Vault ✨
 
-> Distraction-free aesthetic reference archive. Tag images by emotion & aesthetic, extract dynamic color palettes, calculate AI visual similarity vectors, and curate reference moodboards by vibe.
+<p align="center">
+  <img src="src/assets/hero.png" alt="Mood Archive Banner" width="100%" style="border-radius: 16px;" />
+</p>
 
-![Mood Archive](https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=80)
+<p align="center">
+  <b>A distraction-free, open-source aesthetic reference vault & moodboard studio.</b><br/>
+  Tag images by emotion and aesthetic, extract dynamic color palettes, calculate AI visual vectors, and curate reference galleries by vibe.
+</p>
+
+<p align="center">
+  <a href="#-features"><img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" /></a>
+  <a href="#-features"><img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" /></a>
+  <a href="#-features"><img src="https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" /></a>
+  <a href="#-features"><img src="https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" /></a>
+  <a href="#-i18n-localization"><img src="https://img.shields.io/badge/Languages-6_i18n-FFB703?style=for-the-badge&logo=googletranslate&logoColor=black" alt="i18n" /></a>
+  <a href="#-license"><img src="https://img.shields.io/badge/License-MIT-emerald?style=for-the-badge" alt="License" /></a>
+</p>
+
+---
+
+## 📸 Highlights & System Architecture
+
+```mermaid
+graph TD
+    Client[Web App / PWA Desktop] --> Canvas[HTML5 Canvas Pixel Sampler]
+    Canvas --> ColorEngine[K-Means Color Quantization & Distance Engine]
+    ColorEngine --> Tokens[CSS Vars / Tailwind / Figma Tokens JSON]
+    Client --> VisualAI[AI Visual Vector Similarity Engine]
+    VisualAI --> Match[Lighting Warmth & RGB Vector Distance Match]
+    Client --> Synth[Web Audio API Procedural Soundscapes]
+    Client --> DB[(IndexedDB Local Vault)]
+```
 
 ---
 
 ## ✨ Features
 
-- **Multi-Dimensional Tagging**: Categorize references by **Emotion** (*Cyber-noir*, *Nostalgic*, *Serene*, *Melancholic*, *Euphoric*, *Cozy*, *Solitude*, *Wanderlust*, *Ethereal*, *Anxious*) and **Aesthetic** (*Cyberpunk*, *Dark Academia*, *Cottagecore*, *Minimalist*, *Film Grain*, *Wabi-Sabi*, *Vaporwave*, *Brutalist*, *Surrealism*).
-- **Vibe Palette Studio**: Extract 5-color palettes live from photography using client-side HTML5 Canvas pixel quantization. Export tokens to **CSS Variables**, **Tailwind CSS**, and **Figma Tokens JSON**.
-- **Interactive Freeform Moodboard Canvas**: Drag, scale, rotate (-15° to +15° slants), layer z-depth, and attach sticky text notes on a freeform composition canvas.
-- **AI Visual Vector Engine**: Compute lighting warmth vectors ($\text{Warmth} = \frac{R + 0.5G - B}{255}$), luminance, and Euclidean vector distance matching for instant visual recommendations.
-- **Pinterest & Web Bulk Importer**: Paste image links or board URLs to batch import photos into your local vault with auto-palette extraction.
-- **Procedural Soundscape Synthesizer**: Web Audio API ambient audio generator featuring 5 procedural soundscapes (*Midnight Rain*, *Vinyl Warmth*, *Deep Space Drone*, *Twilight Ocean*, *Hearth Fire*).
-- **Global i18n Localization**: Built-in translation support for 6 languages: English, Japanese (日本語), French (Français), German (Deutsch), Spanish (Español), and Korean (한국어).
-- **Offline & Local-First**: Powered by **IndexedDB (`MoodArchiveDB`)** and LocalStorage for high-capacity local photo storage without server limits.
+### 1. 🏷️ Multi-Dimensional Tagging & Taxonomy
+Classify your visual references across two distinct dimensions:
+* **Emotions**: *Cyber-noir*, *Nostalgic*, *Serene*, *Melancholic*, *Euphoric*, *Cozy*, *Solitude*, *Wanderlust*, *Ethereal*, *Anxious*, *Dreamy*, *Mysterious*, *Rebellious*.
+* **Aesthetics**: *Cyberpunk*, *Dark Academia*, *Cottagecore*, *Minimalist*, *Film Grain*, *Wabi-Sabi*, *Vaporwave*, *Brutalist*, *Surrealism*, *Monochrome*, *Botanical*, *Cinematic*, *Neubrutalism*.
+
+### 2. 🎨 Vibe Palette Studio
+* Extract authentic 5-to-8 color palettes from photography in real-time.
+* Preview design tokens live on interactive UI cards and button previews.
+* Export tokens instantly in **CSS Custom Variables**, **Tailwind CSS config**, and **Figma Tokens JSON**.
+
+### 3. 🖼️ Freeform Moodboard Canvas
+* Interactive composition workspace where you can drag, scale, rotate (-15° to +15° slants), layer z-depth, and attach sticky text notes.
+* Save board compositions directly to local storage.
+
+### 4. 🧠 AI Visual Vector & Similarity Search
+* **Lighting Warmth Vector**: Calculates warmth ($\text{Warmth} = \frac{R + 0.5G - B}{255}$), luminance, and contrast.
+* **Vector Similarity Engine**: Calculates Euclidean color histogram distance ($d = \sqrt{\Delta R^2 + \Delta G^2 + \Delta B^2}$) to recommend visually similar photography.
+
+### 5. 📥 Pinterest & Web Board Bulk Importer
+* Paste direct image URLs or board link lists to batch import photo archives with automatic palette extraction and tag classification.
+
+### 6. 🎧 Procedural Web Audio API Soundscapes
+* Built-in sound synthesizer generating 5 ambient audio environments:
+  - 🌧️ **Midnight Rain**
+  - 📻 **Vinyl Warmth**
+  - 🛰️ **Deep Space Drone**
+  - 🌊 **Twilight Ocean**
+  - 🔥 **Hearth Fire**
 
 ---
 
-## 🚀 Quick Start
+## 🌐 i18n Localization
 
-### Prerequisites
-- Node.js >= 18.x
-- npm >= 9.x
+Mood Archive natively supports 6 languages with instant hot-swapping:
+- 🇺🇸 **English** (`EN`)
+- 🇯🇵 **日本語** (`JA`)
+- 🇫🇷 **Français** (`FR`)
+- 🇩🇪 **Deutsch** (`DE`)
+- 🇪🇸 **Español** (`ES`)
+- 🇰🇷 **한국어** (`KO`)
 
-### Installation
+---
+
+## ⚡ Quick Start
 
 ```bash
-# Clone repository
+# 1. Clone the repository
 git clone https://github.com/Wicje/Mood-Archive.git
 cd Mood-Archive
 
-# Install dependencies
+# 2. Install dependencies
 npm install
 
-# Launch local development server
+# 3. Launch local dev server
 npm run dev
 ```
 
-Open `http://localhost:5173/` in your browser.
-
-### Build Production Bundle
-
-```bash
-npm run build
-```
+Visit `http://localhost:5173/` in your browser.
 
 ---
 
-## 🛠️ Tech Stack
+## 🏗️ Project Structure
 
-- **Frontend Framework**: React 19 + TypeScript + Vite
-- **Styling**: Tailwind CSS v4 + Vanilla CSS + Google Fonts (*Cormorant Garamond*, *Plus Jakarta Sans*)
-- **Icons**: Lucide React
-- **Color Quantization**: HTML5 Canvas + Colord
-- **Audio Synthesis**: Web Audio API (Native procedural noise oscillators)
-- **Local Persistence**: IndexedDB + LocalStorage
+```text
+mood-archive/
+├── public/
+│   └── manifest.json         # PWA Web App Manifest
+├── src/
+│   ├── components/
+│   │   ├── AmbianceBar.tsx            # Web Audio Soundscape Player
+│   │   ├── ImageDetailModal.tsx       # Lightbox & AI Prompt Synthesizer
+│   │   ├── ImageGrid.tsx              # Masonry / Grid / Filmstrip Layout
+│   │   ├── MoodboardCanvas.tsx        # Freeform Composition Canvas
+│   │   ├── Navbar.tsx                 # Header & Language Selector
+│   │   ├── PinterestImporterModal.tsx # Bulk URL Importer
+│   │   ├── SidebarFilter.tsx          # Tag & Color Filter Panel
+│   │   ├── UploadModal.tsx            # File & URL Upload Modal
+│   │   ├── VibePaletteStudio.tsx      # Palette Extractor & Token Exporter
+│   │   └── VibeRouletteModal.tsx       # Surprise Vibe Wheel
+│   ├── data/
+│   │   └── initialArchive.ts          # Curated Preset Photography Dataset
+│   ├── services/
+│   │   ├── audioSynth.ts              # Web Audio Procedural Oscillators
+│   │   ├── colorExtractor.ts          # Canvas K-Means Color Quantizer
+│   │   ├── i18n.ts                    # 6-Language Translation Engine
+│   │   ├── storage.ts                 # IndexedDB Persistent Storage
+│   │   └── visualAI.ts                # AI Color Vector Similarity Math
+│   ├── types/
+│   │   └── index.ts                   # TypeScript Interfaces
+│   ├── App.tsx                        # Main Workspace Component
+│   ├── index.css                      # Design Tokens & Keyframe Animations
+│   └── main.tsx                       # React DOM Entry
+├── package.json
+└── vite.config.js
+```
 
 ---
 
 ## 📄 License
 
-MIT License © 2026 Mood Archive Team. Free & Open Source.
+Distributed under the **MIT License**. Free, open-source, and distraction-free forever.
