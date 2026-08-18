@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MoodItem, EmotionTag, AestheticTag } from '../types';
 import { X, Upload, Link, Sparkles, Tag, Plus, Check } from 'lucide-react';
 import { extractPaletteFromImage } from '../services/colorExtractor';
+import { normalizeImageUrl, getCorsSafeImageUrl } from '../services/imageResolver';
 
 interface UploadModalProps {
   onClose: () => void;
@@ -67,11 +68,13 @@ export const UploadModal: React.FC<UploadModalProps> = ({
     e.preventDefault();
     if (!imageUrl || !title) return;
 
+    const safeUrl = tab === 'url' ? getCorsSafeImageUrl(normalizeImageUrl(imageUrl)) : imageUrl;
+
     const newItem: MoodItem = {
       id: `custom-${Date.now()}`,
       title: title.trim(),
-      url: imageUrl,
-      thumbnailUrl: imageUrl,
+      url: safeUrl,
+      thumbnailUrl: safeUrl,
       source: tab === 'file' ? 'custom' : 'url',
       author: author.trim() || undefined,
       emotionTags: selectedEmotions.length > 0 ? selectedEmotions : ['Serene'],

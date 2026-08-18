@@ -140,7 +140,15 @@ export const ImageDetailModal: React.FC<ImageDetailModalProps> = ({
           <img
             src={item.url}
             alt={item.title}
+            referrerPolicy="no-referrer"
             className="max-h-[75vh] w-auto max-w-full object-contain rounded-xl shadow-2xl"
+            onError={(e) => {
+              const target = e.currentTarget;
+              if (!target.dataset.triedProxy) {
+                target.dataset.triedProxy = 'true';
+                target.src = `https://images.weserv.nl/?url=${encodeURIComponent(item.url)}`;
+              }
+            }}
           />
 
           <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none">

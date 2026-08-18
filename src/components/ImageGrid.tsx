@@ -59,7 +59,15 @@ export const ImageGrid: React.FC<ImageGridProps> = ({
                 src={item.thumbnailUrl || item.url}
                 alt={item.title}
                 loading="lazy"
+                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  if (!target.dataset.triedProxy) {
+                    target.dataset.triedProxy = 'true';
+                    target.src = `https://images.weserv.nl/?url=${encodeURIComponent(item.url)}`;
+                  }
+                }}
               />
               <button
                 onClick={(e) => {
@@ -106,7 +114,15 @@ export const ImageGrid: React.FC<ImageGridProps> = ({
               src={item.thumbnailUrl || item.url}
               alt={item.title}
               loading="lazy"
+              referrerPolicy="no-referrer"
               className="w-full h-auto object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              onError={(e) => {
+                const target = e.currentTarget;
+                if (!target.dataset.triedProxy) {
+                  target.dataset.triedProxy = 'true';
+                  target.src = `https://images.weserv.nl/?url=${encodeURIComponent(item.url)}`;
+                }
+              }}
             />
 
             <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4" />

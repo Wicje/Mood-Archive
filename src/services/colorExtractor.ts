@@ -2,6 +2,7 @@ import { colord, extend } from 'colord';
 import a11yPlugin from 'colord/plugins/a11y';
 import harmoniesPlugin from 'colord/plugins/harmonies';
 import labPlugin from 'colord/plugins/lab';
+import { getCorsSafeImageUrl } from './imageResolver';
 
 extend([a11yPlugin, harmoniesPlugin, labPlugin]);
 
@@ -21,6 +22,7 @@ export async function extractPaletteFromImage(
   colorCount: number = 5
 ): Promise<string[]> {
   return new Promise((resolve) => {
+    let triedProxy = false;
     const img = new Image();
     img.crossOrigin = 'Anonymous';
     img.src = imageUrl;
@@ -88,13 +90,22 @@ export async function extractPaletteFromImage(
 
         resolve(filtered);
       } catch (err) {
-        console.warn('Canvas pixel extraction failed due to CORS or security:', err);
-        resolve(['#18181b', '#3f3f46', '#71717a', '#a1a1aa', '#e4e4e7']);
+        if (!triedProxy) {
+          triedProxy = true;
+          img.src = getCorsSafeImageUrl(imageUrl);
+        } else {
+          resolve(['#18181b', '#3f3f46', '#71717a', '#a1a1aa', '#e4e4e7']);
+        }
       }
     };
 
     img.onerror = () => {
-      resolve(['#1e1b4b', '#3730a3', '#4f46e5', '#818cf8', '#c7d2fe']);
+      if (!triedProxy) {
+        triedProxy = true;
+        img.src = getCorsSafeImageUrl(imageUrl);
+      } else {
+        resolve(['#1e1b4b', '#3730a3', '#4f46e5', '#818cf8', '#c7d2fe']);
+      }
     };
   });
 }

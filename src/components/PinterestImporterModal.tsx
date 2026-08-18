@@ -4,6 +4,7 @@ import { X, Download, Sparkles, Check, Layers } from 'lucide-react';
 import { extractPaletteFromImage } from '../services/colorExtractor';
 import { analyzeVisualFeatures } from '../services/visualAI';
 import { TranslationDict } from '../services/i18n';
+import { normalizeImageUrl, getCorsSafeImageUrl } from '../services/imageResolver';
 
 interface PinterestImporterModalProps {
   onClose: () => void;
@@ -21,10 +22,10 @@ export const PinterestImporterModal: React.FC<PinterestImporterModalProps> = ({
   const [importedCount, setImportedCount] = useState<number | null>(null);
 
   const sampleUrls = [
+    'https://i.pinimg.com/736x/2b/96/89/2b9689df46efbf53612d7c07c1340a6b.jpg',
+    'https://i.pinimg.com/736x/88/2c/37/882c377bcf7b2b0051187498c56c2f37.jpg',
     'https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'
+    'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80'
   ];
 
   const handleFillSample = () => {
@@ -56,31 +57,33 @@ export const PinterestImporterModal: React.FC<PinterestImporterModalProps> = ({
     if (!inputText.trim()) return;
 
     setIsProcessing(true);
-    const urls = inputText
+    const rawUrls = inputText
       .split('\n')
       .map((u) => u.trim())
       .filter((u) => u.startsWith('http'));
 
     const newItems: MoodItem[] = [];
 
-    for (let i = 0; i < urls.length; i++) {
-      const url = urls[i];
-      const palette = await extractPaletteFromImage(url, 5);
-      const title = parseTitleFromUrl(url, i);
+    for (let i = 0; i < rawUrls.length; i++) {
+      const rawUrl = rawUrls[i];
+      const normalized = normalizeImageUrl(rawUrl);
+      const safeUrl = getCorsSafeImageUrl(normalized);
+      const palette = await extractPaletteFromImage(safeUrl, 5);
+      const title = parseTitleFromUrl(rawUrl, i);
       const aiFeatures = analyzeVisualFeatures(palette, title);
 
       newItems.push({
         id: `import-${Date.now()}-${i}`,
         title,
-        url,
-        thumbnailUrl: url,
+        url: safeUrl,
+        thumbnailUrl: safeUrl,
         source: 'url',
         emotionTags: aiFeatures.suggestedEmotions.length > 0 ? aiFeatures.suggestedEmotions : ['Serene'],
         aestheticTags: aiFeatures.suggestedAesthetics.length > 0 ? aiFeatures.suggestedAesthetics : ['Cinematic'],
         palette,
         dateAdded: Date.now() - i * 1000,
         isFavorite: false,
-        notes: `Imported directly from URL. Extracted lighting warmth vector: ${aiFeatures.warmth}%`
+        notes: `Imported from Pinterest / URL. Extracted lighting warmth vector: ${aiFeatures.warmth}%`
       });
     }
 
